@@ -4,7 +4,7 @@
 可用于欢迎界面展现Logo以及文字 每个文字以随机坐标移动到正中间 同时图片随进度从透明逐渐显现
 
 ##示范GIF
-![imager](https://github.com/zz010625/AnimLogoView/blob/master/gif/Screenrecorder-2021-07-11-22-50-41-302_0_.gif)
+<img src="https://github.com/zz010625/AnimLogoView/blob/master/gif/Screenrecorder-2021-07-11-22-50-41-302_0_.gif" width="40%" height="40%" alt=" "/><br/>
 
 ##常用设置参数方法
 setLogoTexts 设置Logo文字
