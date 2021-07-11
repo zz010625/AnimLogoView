@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -21,7 +20,7 @@ import androidx.annotation.Nullable;
 public class AnimLogoView extends View {
     private Context mContext;
     private ValueAnimator mMoveAnimator;
-    private OnAnimEnd mOnAnimEnd;
+    private OnAnimFinish mOnAnimFinish;
     private Paint mTextPaint;
     private Paint mPicPaint;
     private SparseArray<PointF> mQuietPoints; // 最终合成logo后的坐标
@@ -44,6 +43,7 @@ public class AnimLogoView extends View {
     private int mPicHeight = -1;//未设置默认按照传入图片本身大小 px
     private int mPicPaddingBottom = 0;//图片与文字的上下间距 px
     private long mAnimDuration = 1500;//动画执行时间
+    private long mFinishDelayed=500;//动画结束后延时时间
     private float mAnimProgress;//动画执行时的进度0->1
 
     public AnimLogoView(Context context) {
@@ -74,8 +74,8 @@ public class AnimLogoView extends View {
 
     }
 
-    public void setOnAnimEnd(OnAnimEnd mOnAnimEnd) {
-        this.mOnAnimEnd = mOnAnimEnd;
+    public void setOnAnimFinish(OnAnimFinish mOnAnimFinish) {
+        this.mOnAnimFinish = mOnAnimFinish;
     }
 
     public void setLogoTexts(String mLogoTexts) {
@@ -89,7 +89,13 @@ public class AnimLogoView extends View {
         //设置文字大小
         mTextPaint.setTextSize(dip2px(mContext, mTextSize));
     }
+    public void setAnimDuration(long mAnimDuration) {
+        this.mAnimDuration = mAnimDuration;
+    }
 
+    public void setFinishDelayed(int mFinishDelayed) {
+        this.mFinishDelayed = mFinishDelayed;
+    }
     public void setTextPadding(int mTextPaddingDp) {
         this.mTextPadding = dip2px(mContext, mTextPaddingDp);
     }
@@ -204,8 +210,13 @@ public class AnimLogoView extends View {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (mOnAnimEnd != null) {
-                    mOnAnimEnd.startOtherActivity();
+                try {
+                    Thread.sleep(mFinishDelayed);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (mOnAnimFinish != null) {
+                    mOnAnimFinish.startOtherActivity();
                 }
             }
 
@@ -287,7 +298,7 @@ public class AnimLogoView extends View {
     /**
      * 对外接口 当动画结束时回调
      */
-    public interface OnAnimEnd {
+    public interface OnAnimFinish {
         void startOtherActivity();
     }
 }
